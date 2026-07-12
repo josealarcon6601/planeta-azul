@@ -1,8 +1,22 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { obtenerPrecios, crearPrecio, actualizarPrecio, eliminarPrecio } from '../lib/api'
 import { toast } from 'sonner'
 import { Euro, Plus, Save, Trash2, Eye, EyeOff, X } from 'lucide-react'
+
+function CampoAutoAlto({ value, onChange, placeholder, className, autoFocus }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.style.height = 'auto'
+      ref.current.style.height = `${ref.current.scrollHeight}px`
+    }
+  }, [value])
+  return (
+    <textarea ref={ref} value={value} onChange={onChange} placeholder={placeholder} autoFocus={autoFocus} rows={1}
+      className={`resize-none overflow-hidden leading-snug ${className}`} />
+  )
+}
 
 function FilaPrecio({ precio }) {
   const qc = useQueryClient()
@@ -28,10 +42,10 @@ function FilaPrecio({ precio }) {
   })
 
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3 sm:items-center px-4 py-3 rounded-xl border transition-colors ${precio.activo ? 'border-gray-100 hover:border-blue-100' : 'border-gray-100 bg-gray-50 opacity-60'}`}>
-      <input value={form.concepto} onChange={e => setForm(p => ({ ...p, concepto: e.target.value }))}
+    <div className={`grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3 sm:items-start px-4 py-3 rounded-xl border transition-colors ${precio.activo ? 'border-gray-100 hover:border-blue-100' : 'border-gray-100 bg-gray-50 opacity-60'}`}>
+      <CampoAutoAlto value={form.concepto} onChange={e => setForm(p => ({ ...p, concepto: e.target.value }))}
         className="sm:col-span-4 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      <input value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Descripción (opcional)"
+      <CampoAutoAlto value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Descripción (opcional)"
         className="sm:col-span-4 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500" />
       <div className="sm:col-span-2 relative">
         <input type="number" step="0.01" value={form.precio} onChange={e => setForm(p => ({ ...p, precio: e.target.value }))}
@@ -70,10 +84,10 @@ function FormNuevoPrecio({ categoriaSugerida, onClose }) {
 
   return (
     <form onSubmit={e => { e.preventDefault(); if (!form.concepto || form.precio === '') return toast.error('Concepto y precio son obligatorios'); mut.mutate(form) }}
-      className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3 sm:items-center px-4 py-3 rounded-xl border border-blue-200 bg-blue-50/40">
-      <input autoFocus value={form.concepto} onChange={e => setForm(p => ({ ...p, concepto: e.target.value }))} placeholder="Concepto (ej: Inmersión guiada Bajo de Piles)"
+      className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-3 sm:items-start px-4 py-3 rounded-xl border border-blue-200 bg-blue-50/40">
+      <CampoAutoAlto autoFocus value={form.concepto} onChange={e => setForm(p => ({ ...p, concepto: e.target.value }))} placeholder="Concepto (ej: Inmersión guiada Bajo de Piles)"
         className="sm:col-span-4 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      <input value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Descripción (opcional)"
+      <CampoAutoAlto value={form.descripcion} onChange={e => setForm(p => ({ ...p, descripcion: e.target.value }))} placeholder="Descripción (opcional)"
         className="sm:col-span-4 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
       <div className="sm:col-span-2 relative">
         <input type="number" step="0.01" value={form.precio} onChange={e => setForm(p => ({ ...p, precio: e.target.value }))} placeholder="0.00"
