@@ -32,9 +32,10 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="hidden md:flex items-center gap-1.5 text-sm font-medium text-gold-700 bg-gold-50 px-2.5 sm:px-3 py-1.5 rounded-full border border-gold-200" title="Idiomas detectados automáticamente: español, inglés, francés, alemán, italiano, neerlandés">
-              <Globe className="w-3.5 h-3.5" />
-              6 idiomas · 24/7
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gold-700 bg-gold-50 px-2 sm:px-3 py-1.5 rounded-full border border-gold-200" title="Idiomas detectados automáticamente: español, inglés, francés, alemán, italiano, neerlandés">
+              <Globe className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="hidden sm:inline">6 idiomas · 24/7</span>
+              <span className="sm:hidden">6 idiomas</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 px-2.5 sm:px-3 py-1.5 rounded-full border border-green-200">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
